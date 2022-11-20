@@ -36,18 +36,21 @@ public class PRPreProcess {
     }
 
     public static class PRPreProReducer
-            extends Reducer<IntWritable,IntWritable,IntWritable,Text> {
+            extends Reducer<IntWritable,IntWritable,IntWritable, PRNodeWritable> {
         public void reduce(IntWritable key, Iterable<IntWritable> values,
                            Context context
         ) throws IOException, InterruptedException {
-            Text resText = new Text();
+            PRNodeWritable resNode = new PRNodeWritable();
+            ArrayWritable resArr = new ArraryWritable();
             String resStr = "";
             for (IntWritable endPoint : values){
                 resStr = resStr + String.valueOf(endPoint);
                 resStr = resStr + ",";
             }
-            resText.set(resStr.substring(0,resStr.length()-1)));
-            context.write(key, resText);
+            resStr = resStr.substring(0,resStr.length()-1);
+            resArr = PRNodeWritable.getStringToArray(resStr);
+            resNode.set(1.0,resArr,true);
+            context.write(key, resNode);
         }
     }
     public static void main(String[] args) throws Exception {
@@ -59,7 +62,7 @@ public class PRPreProcess {
 //        job.setCombinerClass(PDPreProcess.PDPreProReducer.class);
         job.setReducerClass(PRPreProcess.PRPreProReducer.class);
         job.setOutputKeyClass(IntWritable.class);
-        job.setOutputValueClass(Text.class);
+        job.setOutputValueClass(PRNodeWritable.class);
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0]));

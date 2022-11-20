@@ -25,7 +25,7 @@ public class PRPreProcess {
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
             IntWritable startPoint = new IntWritable();
-            InwWritable endPoint = new IntWritable();
+            IntWritable endPoint = new IntWritable();
             StringTokenizer itr = new StringTokenizer(value.toString());
             int u = Integer.valueOf(itr.nextToken());
             int v = Integer.valueOf(itr.nextToken());

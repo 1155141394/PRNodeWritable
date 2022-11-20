@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.IntWritable;
@@ -20,24 +20,24 @@ import org.apache.hadoop.classification.InterfaceStability;
 
 public class PRNodeWritable implements Writable {
     // Some data
-    private FloatWritable distance = new FloatWritable(1);
+    private DoubleWritable distance = new DoubleWritable(1);
     private Text adjList = new Text();
 
     public BooleanWritable flag = new BooleanWritable(true);
 
     public void PRNodeWritable() throws IOException {
-        this.distance = new FloatWritable(1);
+        this.distance = new DoubleWritable(1);
         this.adjList = new Text();
         this.flag = new BooleanWritable(true);
     }
 
-    public void set (FloatWritable distance, Text adjList, BooleanWritable flag){
+    public void set (DoubleWritable distance, Text adjList, BooleanWritable flag){
         this.distance = distance;
         this.adjList = adjList;
         this.flag = flag;
     }
 
-    public void setDistance(FloatWritable distance){
+    public void setDistance(DoubleWritable distance){
         this.distance = distance;
     }
 
@@ -50,7 +50,7 @@ public class PRNodeWritable implements Writable {
     }
 
 
-    public FloatWritable getDistance() {
+    public DoubleWritable getDistance() {
         return this.distance;
     }
 
@@ -82,7 +82,7 @@ public class PRNodeWritable implements Writable {
 
     public String toString() {
         StringBuilder result = new StringBuilder();
-        FloatWritable distance = this.distance;
+        DoubleWritable distance = this.distance;
         Text adjList = this.adjList;
         BooleanWritable flag = this.flag;
 
@@ -96,7 +96,7 @@ public class PRNodeWritable implements Writable {
 
     public String toString(LongWritable nid) {
         StringBuilder result = new StringBuilder();
-        FloatWritable distance = this.distance;
+        DoubleWritable distance = this.distance;
         Text adjList = this.adjList;
         BooleanWritable flag = this.flag;
 
@@ -123,8 +123,8 @@ public class PRNodeWritable implements Writable {
         String[] all = str.trim().split(" ");
         String[] nodeAndDist = all[0].split("\t");
         int nid = Integer.parseInt(nodeAndDist[0]);
-        float distance = Float.parseFloat(nodeAndDist[1]);
-        FloatWritable distanceWritable = new FloatWritable(distance);
+        double distance = Double.parseDouble(nodeAndDist[1]);
+        DoubleWritable distanceWritable = new DoubleWritable(distance);
 
         boolean flag = Boolean.parseBoolean(all[1]);
         BooleanWritable flagWritable = new BooleanWritable(flag);

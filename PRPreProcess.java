@@ -31,7 +31,7 @@ public class PRPreProcess {
             int v = Integer.valueOf(itr.nextToken());
             startPoint.set(u);
             endPoint.set(v);
-            context.write(u, v);
+            context.write(startPoint, endPoint);
         }
     }
 

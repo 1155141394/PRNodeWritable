@@ -27,11 +27,11 @@ public class PRNodeWritable implements Writable {
 
     public void PRNodeWritable() throws IOException {
         this.distance = new FloatWritable(1);
-        this.adjList = new TextWritable();
+        this.adjList = new Text();
         this.flag = new BooleanWritable(true);
     }
 
-    public void set (FloatWritable distance, TextWritable adjList, BooleanWritable flag){
+    public void set (FloatWritable distance, Text adjList, BooleanWritable flag){
         this.distance = distance;
         this.adjList = adjList;
         this.flag = flag;

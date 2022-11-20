@@ -1,16 +1,15 @@
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.*; // 引入 ArrayList 类
+import java.util.*;
 import java.util.HashMap;
-import java.util.Arrays;
+
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
@@ -22,17 +21,17 @@ import org.apache.hadoop.classification.InterfaceStability;
 public class PRNodeWritable implements Writable {
     // Some data
     private FloatWritable distance = new FloatWritable(1);
-    private ArrayWritable adjList = new ArrayWritable();
+    private Text adjList = new Text();
 
     public BooleanWritable flag = new BooleanWritable(true);
 
     public void PRNodeWritable() throws IOException {
         this.distance = new FloatWritable(1);
-        this.adjList = new ArrayWritable();
+        this.adjList = new TextWritable();
         this.flag = new BooleanWritable(true);
     }
 
-    public void set (FloatWritable distance, ArrayWritable adjList, BooleanWritable flag){
+    public void set (FloatWritable distance, TextWritable adjList, BooleanWritable flag){
         this.distance = distance;
         this.adjList = adjList;
         this.flag = flag;
@@ -42,7 +41,7 @@ public class PRNodeWritable implements Writable {
         this.distance = distance;
     }
 
-    public void setAdjList(ArrayWritable adjList){
+    public void setAdjList(Text adjList){
         this.adjList = adjList;
     }
 
@@ -55,7 +54,7 @@ public class PRNodeWritable implements Writable {
         return this.distance;
     }
 
-    public ArrayWritable getAdjList() {
+    public Text getAdjList() {
         return this.adjList;
     }
 
@@ -84,18 +83,11 @@ public class PRNodeWritable implements Writable {
     public String toString() {
         StringBuilder result = new StringBuilder();
         FloatWritable distance = this.distance;
-        ArrayWritable adjList = this.adjList;
+        Text adjList = this.adjList;
         BooleanWritable flag = this.flag;
 
-
-        Object[] objects = adjList.toArray();
-        long[] keys = new long[objects.length];
-        System.arraycopy(objects, 0, keys, 0, objects.length);
-
         String s = new String(" ");
-        for (long key : keys) {
-            s = s + key.toString() + "," ;
-        }
+        s = s + adjList.toString();
         s = s + " ";
         result.append( distance.toString() + " " + flag.toString() + s );
         return result.toString();
@@ -105,17 +97,11 @@ public class PRNodeWritable implements Writable {
     public String toString(LongWritable nid) {
         StringBuilder result = new StringBuilder();
         FloatWritable distance = this.distance;
-        ArrayWritable adjList = this.adjList;
+        Text adjList = this.adjList;
         BooleanWritable flag = this.flag;
 
-        Object[] objects = adjList.toArray();
-        long[] keys = new long[objects.length];
-        System.arraycopy(objects, 0, keys, 0, objects.length);
-
         String s = new String(" ");
-        for (long key : keys) {
-            s = s + key.toString() + "," ;
-        }
+        s = s + adjList.toString();
         s = s + " ";
         result.append( nid.toString() + "\t" + distance.toString() + " " + flag.toString() + s );
         return result.toString();
@@ -131,19 +117,6 @@ public class PRNodeWritable implements Writable {
     }
 
 
-    public static LongWritable[] getStringToArray(String str){
-        String[] str1 = str.split(",");
-        LongWritable[] array = new LongWritable[str1.length];
-
-        for (int i = 0; i < str1.length; i++) {
-            long l = Long.parseLong(str1[i]);
-            LongWritable longWritable = new LongWritable(l);
-            array[i] = longWritable;
-        }
-        return array;
-    }
-
-
     public int getByText(Text t){
         PRNodeWritable node = new PRNodeWritable();
         String str = t.toString();
@@ -156,16 +129,14 @@ public class PRNodeWritable implements Writable {
         boolean flag = Boolean.parseBoolean(all[1]);
         BooleanWritable flagWritable = new BooleanWritable(flag);
 
-        ArrayWritable arrayWritable = new ArrayWritable();
+        Text text = new Text();
         if(all.length == 3)
         {
-            LongWritable[] array = getStringToArray(all[2]);
-            arrayWritable.set(array);
+            text.set(all[2]);
         }
 
-
         this.distance = distanceWritable;
-        this.adjList = arrayWritable;
+        this.adjList = Text;
         this.flag = flagWritable;
         return nid;
 

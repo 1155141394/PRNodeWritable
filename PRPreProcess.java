@@ -41,15 +41,15 @@ public class PRPreProcess {
                            Context context
         ) throws IOException, InterruptedException {
             PRNodeWritable resNode = new PRNodeWritable();
-            ArrayWritable resArr = new ArraryWritable();
+            Text resText = new Text();
             String resStr = "";
             for (IntWritable endPoint : values){
                 resStr = resStr + String.valueOf(endPoint);
                 resStr = resStr + ",";
             }
             resStr = resStr.substring(0,resStr.length()-1);
-            resArr = PRNodeWritable.getStringToArray(resStr);
-            resNode.set(1.0,resArr,true);
+            resText.set(resStr);
+            resNode.set(1.0,resText,true);
             context.write(key, resNode);
         }
     }

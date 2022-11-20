@@ -136,7 +136,7 @@ public class PRNodeWritable implements Writable {
         }
 
         this.distance = distanceWritable;
-        this.adjList = Text;
+        this.adjList = text;
         this.flag = flagWritable;
         return nid;
 

@@ -35,6 +35,9 @@ public class PageRank {
 
             DoubleWritable pageRankWritable = pr.getDistance();
             double pageRank = pageRankWritable.get();
+            if(pageRank < 0){
+                pageRank = 1/count;
+            }
             double p = pageRank/adjs.length;
 
             context.write(nidWritable,pr);

@@ -78,8 +78,8 @@ public class PageRank {
     }
 
     public static void main(String[] args) throws Exception {
-        Configuration conf = new Configuration();
-        Job job1 = Job.getInstance(conf, "PRPreProcess");
+        Configuration conf1 = new Configuration();
+        Job job1 = Job.getInstance(conf1, "PRPreProcess");
         job1.setJarByClass(PRPreProcess.class);
         job1.setMapperClass(PRPreProcess.PRPreProMapper.class);
 //        job.setCombinerClass(PDPreProcess.PDPreProReducer.class);
@@ -114,10 +114,11 @@ public class PageRank {
         int iteration = Integer.parseInt(itr);
         int threshold = Integer.parseInt(thre);
         int iterNum = 0;
-        conf.set("reachCount", reachCount);
-        conf.set("threshold", threshold);
+        Configuration conf2 = new Configuration();
+        conf2.set("reachCount", reachCount);
+        conf2.set("threshold", threshold);
 
-        Job job2 = Job.getInstance(conf, "PageRank");
+        Job job2 = Job.getInstance(conf2, "PageRank");
         job2.setJarByClass(PageRank.class);
         job2.setMapperClass(PageRankMapper.class);
         job2.setMapOutputKeyClass(LongWritable.class);

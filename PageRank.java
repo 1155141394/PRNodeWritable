@@ -28,7 +28,7 @@ public class PageRank {
             Configuration conf = context.getConfiguration();
             long count = Long.valueOf(conf.get("reachCount"));
             PRNodeWritable pr = new PRNodeWritable();
-            long nid = (long)pr.getByText(t);
+            long nid = pr.getByText(t);
             LongWritable nidWritable = new LongWritable(nid);
 
             Text adjList = pr.getAdjList();
@@ -40,7 +40,8 @@ public class PageRank {
                 pageRank = 1/count;
             }
             double p = pageRank/adjs.length;
-
+            DoubleWritable pWritable = new DoubleWritable(p);
+            pr.setDistance(pWritable);
             context.write(nidWritable,pr);
             for(long adj : adjs){
                 LongWritable adjWritable = new LongWritable(adj);
@@ -71,7 +72,7 @@ public class PageRank {
 //                {
 //                    res += node.getDistance().get();
 //                }
-                context.write(key, infoNode);
+                context.write(key, node);
             }
 //            infoNode.setDistance(new DoubleWritable(res));
 //            context.write(key, infoNode);

@@ -193,8 +193,8 @@ public class PageRank {
 //        job2.setCombinerClass(PageRankReducer.class);
         job3.setReducerClass(ResReducer.class);
         //设置reduce输出的key和value类型
-        job2.setOutputKeyClass(LongWritable.class);
-        job2.setOutputValueClass(Text.class);
+        job3.setOutputKeyClass(LongWritable.class);
+        job3.setOutputValueClass(Text.class);
         FileInputFormat.addInputPath(job3, new Path("/user/hadoop/pr/tmp/Output" + i));
         FileOutputFormat.setOutputPath(job3, new Path(args[3]));
         System.exit(job3.waitForCompletion(true) ? 0 : 1);

@@ -87,7 +87,7 @@ public class PageRank {
             Configuration conf = context.getConfiguration();
             Double threshold = Double.valueOf(conf.get("threshold"));
             if (values.getDistance().get() > threshold)
-                context.write(key, value);
+                context.write(key, values);
         }
     }
 
@@ -197,6 +197,6 @@ public class PageRank {
         job2.setOutputValueClass(Text.class);
         FileInputFormat.addInputPath(job3, new Path("/user/hadoop/pr/tmp/Output" + i));
         FileOutputFormat.setOutputPath(job3, new Path(args[3]));
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        System.exit(job3.waitForCompletion(true) ? 0 : 1);
     }
 }

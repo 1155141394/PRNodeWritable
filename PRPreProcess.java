@@ -25,6 +25,7 @@ public class PRPreProcess {
 
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
+            long count = context.getCounter(ReachCounter.COUNT).getValue;
             IntWritable startPoint = new IntWritable();
             IntWritable endPoint = new IntWritable();
             StringTokenizer itr = new StringTokenizer(value.toString());
@@ -38,6 +39,9 @@ public class PRPreProcess {
 
     public static class PRPreProReducer
             extends Reducer<IntWritable,IntWritable,IntWritable, PRNodeWritable> {
+
+        public static enum ReachCounter { COUNT };
+
         public void reduce(IntWritable key, Iterable<IntWritable> values,
                            Context context
         ) throws IOException, InterruptedException {
@@ -51,6 +55,7 @@ public class PRPreProcess {
             resStr = resStr.substring(0,resStr.length()-1);
             resText.set(resStr);
             resNode.set(new DoubleWritable(-1.0),resText,new BooleanWritable(true));
+            context.getCounter(ReachCounter.COUNT).increment(1);
             context.write(key, resNode);
         }
     }

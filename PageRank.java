@@ -24,6 +24,7 @@ public class PageRank {
 
         public void map(LongWritable key, Text t, Context context
         ) throws IOException, InterruptedException {
+
             PRNodeWritable pr = new PRNodeWritable();
             long nid = (long)pr.getByText(t);
             LongWritable nidWritable = new LongWritable(nid);

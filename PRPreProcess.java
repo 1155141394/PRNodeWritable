@@ -50,7 +50,7 @@ public class PRPreProcess {
             }
             resStr = resStr.substring(0,resStr.length()-1);
             resText.set(resStr);
-            resNode.set(new DoubleWritable(1.0),resText,new BooleanWritable(true));
+            resNode.set(new DoubleWritable(-1.0),resText,new BooleanWritable(true));
             context.write(key, resNode);
         }
     }

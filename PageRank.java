@@ -48,12 +48,26 @@ public class PageRank {
     }
 
     public static class PageRankReducer
-            extends Reducer<LongWritable,PDNodeWritable,LongWritable,PDNodeWritable> {
+            extends Reducer<LongWritable,PRNodeWritable,LongWritable,PRNodeWritable> {
 
-        public void reduce(LongWritable key, Iterable<PDNodeWritable> values,
+        public void reduce(LongWritable key, Iterable<PRNodeWritable> values,
                            Context context
         ) throws IOException, InterruptedException {
-
+            double res = 0.0;
+            PRNodeWritable infoNode = new PRNodeWritable();
+            for (PRNodeWritable node: values)
+            {
+                if (node.getFlag().get())
+                {
+                    infoNode.copy(node, key);
+                }
+                else
+                {
+                    res += node.getDistance().get();
+                }
+            }
+            infoNode.setDistance(new DoubleWritable(res));
+            context.write(key, infoNode);
         }
     }
 

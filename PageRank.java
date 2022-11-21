@@ -26,7 +26,7 @@ public class PageRank {
         public void map(LongWritable key, Text t, Context context
         ) throws IOException, InterruptedException {
             Configuration conf = context.getConfiguration();
-            long count = conf.get("reachCount");
+            long count = Long.valueOf(conf.get("reachCount"));
             PRNodeWritable pr = new PRNodeWritable();
             long nid = (long)pr.getByText(t);
             LongWritable nidWritable = new LongWritable(nid);
@@ -109,13 +109,12 @@ public class PageRank {
         long reachCount= job1.getCounters().findCounter(PRPreProcess.PRPreProReducer.ReachCounter.COUNT).getValue();
 
         String itr = args[0];
-        String thre = args[1];
+        String threshold = args[1];
         int i = 0;
         int iteration = Integer.parseInt(itr);
-        int threshold = Integer.parseInt(thre);
         int iterNum = 0;
         Configuration conf2 = new Configuration();
-        conf2.set("reachCount", reachCount);
+        conf2.set("reachCount", String.valueOf(reachCount));
         conf2.set("threshold", threshold);
 
         Job job2 = Job.getInstance(conf2, "PageRank");

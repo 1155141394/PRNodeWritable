@@ -79,6 +79,37 @@ public class PageRank {
         }
     }
 
+    public static class ResMapper
+            extends Mapper<LongWritable, PRNodeWritable, LongWritable, PRNodeWritable> {
+
+        public void map(LongWritable key, PRNodeWritable values, Context context
+        ) throws IOException, InterruptedException {
+            Configuration conf = context.getConfiguration();
+            Double threshold = Double.valueOf(conf.get("threshold"));
+            if (values.getDistance().get() > threshold)
+                context.write(key, value);
+        }
+    }
+
+    public static class ResReducer
+            extends Reducer<LongWritable,PRNodeWritable,LongWritable,Text> {
+
+        public void reduce(LongWritable key, Iterable<PRNodeWritable> values,
+                           Context context
+        ) throws IOException, InterruptedException {
+            Text resText = new Text();
+            String resStr = "";
+            for (PRNodeWritable node: values)
+            {
+                resStr = resStr + node.getDistance();
+            }
+            resText.set(resStr);
+            context.write(key, resText);
+
+        }
+    }
+
+
     public static void main(String[] args) throws Exception {
         Configuration conf1 = new Configuration();
         Job job1 = Job.getInstance(conf1, "PRPreProcess");
@@ -133,10 +164,7 @@ public class PageRank {
         while(i < iteration) {
             FileInputFormat.setInputPaths(job2, new Path("/user/hadoop/pr/tmp/Output" + i));
             i++;
-            if (i < iteration - 1)
-                FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/pr/tmp/Output" + i));
-            else
-                FileOutputFormat.setOutputPath(job2, new Path(args[3]));
+            FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/pr/tmp/Output" + i));
 
             ControlledJob cjob2 = new ControlledJob(conf2);
 
@@ -155,6 +183,20 @@ public class PageRank {
                 }
             }
         }
-
+        Configuration conf3 = new Configuration();
+        conf3.set("threshold", threshold);
+        Job job3 = Job.getInstance(conf3, "ResultGet");
+        job3.setJarByClass(PageRank.class);
+        job3.setMapperClass(ResMapper.class);
+        job3.setMapOutputKeyClass(LongWritable.class);
+        job3.setMapOutputValueClass(PRNodeWritable.class);
+//        job2.setCombinerClass(PageRankReducer.class);
+        job3.setReducerClass(ResReducer.class);
+        //设置reduce输出的key和value类型
+        job2.setOutputKeyClass(LongWritable.class);
+        job2.setOutputValueClass(Text.class);
+        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/pr/tmp/Output" + i));
+        FileOutputFormat.setOutputPath(job3, new Path(args[3]));
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }

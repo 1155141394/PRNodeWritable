@@ -37,7 +37,7 @@ public class PageRank {
             DoubleWritable pageRankWritable = pr.getDistance();
             double pageRank = pageRankWritable.get();
             if(pageRank < 0){
-                pageRank = 1/count;
+                pageRank = 1.0/count;
             }
             double p = pageRank/adjs.length;
             DoubleWritable pWritable = new DoubleWritable(p);
@@ -64,18 +64,18 @@ public class PageRank {
             PRNodeWritable infoNode = new PRNodeWritable();
             for (PRNodeWritable node: values)
             {
-//                if (node.getFlag().get())
-//                {
-//                    infoNode.copy(node, key);
-//                }
-//                else
-//                {
-//                    res += node.getDistance().get();
-//                }
-                context.write(key, node);
+                if (node.getFlag().get())
+                {
+                    infoNode.copy(node, key);
+                }
+                else
+                {
+                    res += node.getDistance().get();
+                }
+
             }
-//            infoNode.setDistance(new DoubleWritable(res));
-//            context.write(key, infoNode);
+            infoNode.setDistance(new DoubleWritable(res));
+            context.write(key, infoNode);
         }
     }
 

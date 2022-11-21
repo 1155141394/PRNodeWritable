@@ -59,20 +59,20 @@ public class PRPreProcess {
             context.write(key, resNode);
         }
     }
-//    public static void main(String[] args) throws Exception {
-//        Configuration conf = new Configuration();
-////        conf.set("src", args[2]);
-//        Job job = Job.getInstance(conf, "PRPreProcess");
-//        job.setJarByClass(PRPreProcess.class);
-//        job.setMapperClass(PRPreProcess.PRPreProMapper.class);
-////        job.setCombinerClass(PDPreProcess.PDPreProReducer.class);
-//        job.setReducerClass(PRPreProcess.PRPreProReducer.class);
-//        job.setOutputKeyClass(IntWritable.class);
-//        job.setOutputValueClass(PRNodeWritable.class);
-//        job.setMapOutputKeyClass(IntWritable.class);
-//        job.setMapOutputValueClass(IntWritable.class);
-//        FileInputFormat.addInputPath(job, new Path(args[0]));
-//        FileOutputFormat.setOutputPath(job, new Path(args[1]));
-//        System.exit(job.waitForCompletion(true) ? 0 : 1);
-//    }
+    public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+//        conf.set("src", args[2]);
+        Job job = Job.getInstance(conf, "PRPreProcess");
+        job.setJarByClass(PRPreProcess.class);
+        job.setMapperClass(PRPreProcess.PRPreProMapper.class);
+//        job.setCombinerClass(PDPreProcess.PDPreProReducer.class);
+        job.setReducerClass(PRPreProcess.PRPreProReducer.class);
+        job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(PRNodeWritable.class);
+        job.setMapOutputKeyClass(IntWritable.class);
+        job.setMapOutputValueClass(IntWritable.class);
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    }
 }

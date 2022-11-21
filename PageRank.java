@@ -63,17 +63,18 @@ public class PageRank {
             PRNodeWritable infoNode = new PRNodeWritable();
             for (PRNodeWritable node: values)
             {
-                if (node.getFlag().get())
-                {
-                    infoNode.copy(node, key);
-                }
-                else
-                {
-                    res += node.getDistance().get();
-                }
+//                if (node.getFlag().get())
+//                {
+//                    infoNode.copy(node, key);
+//                }
+//                else
+//                {
+//                    res += node.getDistance().get();
+//                }
+                context.write(key, infoNode);
             }
-            infoNode.setDistance(new DoubleWritable(res));
-            context.write(key, infoNode);
+//            infoNode.setDistance(new DoubleWritable(res));
+//            context.write(key, infoNode);
         }
     }
 

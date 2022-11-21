@@ -80,14 +80,16 @@ public class PageRank {
     }
 
     public static class ResMapper
-            extends Mapper<LongWritable, PRNodeWritable, LongWritable, PRNodeWritable> {
+            extends Mapper<LongWritable, Text, LongWritable, PRNodeWritable> {
 
-        public void map(LongWritable key, PRNodeWritable values, Context context
+        public void map(LongWritable key, Text values, Context context
         ) throws IOException, InterruptedException {
+            PRNodeWritable node = new PRNodeWritable();
+            node.getByText(values);
             Configuration conf = context.getConfiguration();
             Double threshold = Double.valueOf(conf.get("threshold"));
-            if (values.getDistance().get() > threshold)
-                context.write(key, values);
+            if (node.getDistance().get() > threshold)
+                context.write(key, node);
         }
     }
 

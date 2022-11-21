@@ -123,7 +123,7 @@ public class PageRank {
         job2.setMapperClass(PageRankMapper.class);
         job2.setMapOutputKeyClass(LongWritable.class);
         job2.setMapOutputValueClass(PRNodeWritable.class);
-        job2.setCombinerClass(PageRankReducer.class);
+//        job2.setCombinerClass(PageRankReducer.class);
         job2.setReducerClass(PageRankReducer.class);
         //设置reduce输出的key和value类型
         job2.setOutputKeyClass(LongWritable.class);

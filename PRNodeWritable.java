@@ -116,6 +116,15 @@ public class PRNodeWritable implements Writable {
         return;
     }
 
+    public static long[] stringToArray(Text t){
+        String str = t.toString();
+        String[] str1 = str.split(",");
+        long[] array = new long[str1.length];
+        for(int i=0;i<str1.length;i++){
+            array[i] = Long.parseLong(str1[i]);
+        }
+        return array;
+    }
 
     public int getByText(Text t){
         PRNodeWritable node = new PRNodeWritable();

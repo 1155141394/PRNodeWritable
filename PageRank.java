@@ -20,11 +20,30 @@ import org.apache.hadoop.io.ArrayWritable;
 
 public class PageRank {
     public static class PageRankMapper
-            extends Mapper<LongWritable, Text, LongWritable,PDNodeWritable> {
+            extends Mapper<LongWritable, Text, LongWritable,PRNodeWritable> {
 
         public void map(LongWritable key, Text t, Context context
         ) throws IOException, InterruptedException {
+            PRNodeWritable pr = new PRNodeWritable();
+            long nid = (long)pr.getByText(t);
+            LongWritable nidWritable = new LongWritable(nid);
 
+            Text adjList = pr.getAdjList();
+            long[] adjs = PRNodeWritable.stringToArray(adjList);
+
+            DoubleWritable pageRankWritable = pr.getDistance();
+            double pageRank = pageRankWritable.get();
+            double p = pageRank/adjs.length;
+
+            context.write(nidWritable,pr);
+            for(long adj : adjs){
+                LongWritable adjWritable = new LongWritable(adj);
+                Text tmp = new Text();
+                BooleanWritable flag = new BooleanWritable(false);
+                PRNodeWritable N = new PRNodeWritable();
+                N.set(new DoubleWritable(p),tmp,flag);
+                context.write(adjWritable, N);
+            }
         }
     }
 

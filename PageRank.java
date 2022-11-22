@@ -147,26 +147,27 @@ public class PageRank {
         String threshold = args[1];
         int i = 0;
         int iteration = Integer.parseInt(itr);
-        int iterNum = 0;
-        Configuration conf2 = new Configuration();
-        conf2.set("reachCount", String.valueOf(reachCount));
-        conf2.set("threshold", threshold);
 
-        Job job2 = Job.getInstance(conf2, "PageRank");
-        job2.setJarByClass(PageRank.class);
-        job2.setMapperClass(PageRankMapper.class);
-        job2.setMapOutputKeyClass(LongWritable.class);
-        job2.setMapOutputValueClass(PRNodeWritable.class);
-//        job2.setCombinerClass(PageRankReducer.class);
-        job2.setReducerClass(PageRankReducer.class);
-        //设置reduce输出的key和value类型
-        job2.setOutputKeyClass(LongWritable.class);
-        job2.setOutputValueClass(PRNodeWritable.class);
+
 
         while(i < iteration) {
-            FileInputFormat.setInputPaths(job2, new Path("/user/hadoop/pr/tmp/Output" + i));
+            Configuration conf2 = new Configuration();
+            conf2.set("reachCount", String.valueOf(reachCount));
+            conf2.set("threshold", threshold);
+
+            Job job2 = Job.getInstance(conf2, "PageRank");
+            job2.setJarByClass(PageRank.class);
+            job2.setMapperClass(PageRankMapper.class);
+            job2.setMapOutputKeyClass(LongWritable.class);
+            job2.setMapOutputValueClass(PRNodeWritable.class);
+//        job2.setCombinerClass(PageRankReducer.class);
+            job2.setReducerClass(PageRankReducer.class);
+            //设置reduce输出的key和value类型
+            job2.setOutputKeyClass(LongWritable.class);
+            job2.setOutputValueClass(PRNodeWritable.class);
+            FileInputFormat.setInputPaths(job2, new Path("/user/hadoop/pr/tmp/output" + i));
             i++;
-            FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/pr/tmp/Output" + i));
+            FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/pr/tmp/output" + i));
 
             ControlledJob cjob2 = new ControlledJob(conf2);
 

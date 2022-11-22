@@ -85,7 +85,7 @@ public class PageRank {
         public void map(LongWritable key, Text values, Context context
         ) throws IOException, InterruptedException {
             PRNodeWritable node = new PRNodeWritable();
-            long nid = long(node.getByText(values));
+            long nid = (long)node.getByText(values);
             Configuration conf = context.getConfiguration();
             Double threshold = Double.valueOf(conf.get("threshold"));
             if (node.getDistance().get() > threshold)

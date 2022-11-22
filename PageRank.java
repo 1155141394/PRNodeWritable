@@ -172,7 +172,7 @@ public class PageRank {
             ControlledJob cjob2 = new ControlledJob(conf2);
 
             cjob2.setJob(job2);
-            jc = new JobControl("PageRank");
+            JobControl jc = new JobControl("PageRank");
             jc.addJob(cjob2);
 
             jcThread = new Thread(jc);

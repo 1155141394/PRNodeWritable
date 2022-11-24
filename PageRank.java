@@ -71,7 +71,7 @@ public class PageRank {
                 if (node.getFlag().get())
                 {
                     infoNode.copy(node, key);
-                    Double distance = infoNode.getDistance().get()
+                    Double distance = infoNode.getDistance().get();
                     if (distance < 0)
                     {
                         distance = distance * (-1.0);

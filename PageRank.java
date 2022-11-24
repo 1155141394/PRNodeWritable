@@ -37,19 +37,23 @@ public class PageRank {
             DoubleWritable pageRankWritable = pr.getDistance();
             double pageRank = pageRankWritable.get();
             if(pageRank < 0){
-                pageRank = 1.0/count;
+                pageRank = -1.0/count;
+                pr.setDistance(new DoubleWritable(pageRank));
+                context.write(nidWritable,pr);
             }
-            double p = pageRank/adjs.length;
-            DoubleWritable pWritable = new DoubleWritable(p);
-            pr.setDistance(pWritable);
-            context.write(nidWritable,pr);
-            for(long adj : adjs){
-                LongWritable adjWritable = new LongWritable(adj);
-                Text tmp = new Text();
-                BooleanWritable flag = new BooleanWritable(false);
-                PRNodeWritable N = new PRNodeWritable();
-                N.set(new DoubleWritable(p),tmp,flag);
-                context.write(adjWritable, N);
+            else{
+                double p = pageRank/adjs.length;
+                DoubleWritable pWritable = new DoubleWritable(p);
+                pr.setDistance(pWritable);
+                context.write(nidWritable,pr);
+                for(long adj : adjs){
+                    LongWritable adjWritable = new LongWritable(adj);
+                    Text tmp = new Text();
+                    BooleanWritable flag = new BooleanWritable(false);
+                    PRNodeWritable N = new PRNodeWritable();
+                    N.set(new DoubleWritable(p),tmp,flag);
+                    context.write(adjWritable, N);
+                }
             }
         }
     }
@@ -67,6 +71,14 @@ public class PageRank {
                 if (node.getFlag().get())
                 {
                     infoNode.copy(node, key);
+                    Double distance = infoNode.getDistance().get()
+                    if (distance < 0)
+                    {
+                        distance = distance * (-1.0);
+                        infoNode.setDistance(new DoubleWritable(distance));
+                        context.write(key, infoNode);
+                        return;
+                    }
                 }
                 else
                 {

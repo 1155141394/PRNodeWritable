@@ -136,7 +136,7 @@ public class PageRank {
         job1.setMapOutputKeyClass(IntWritable.class);
         job1.setMapOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job1, new Path(args[2]));
-        FileOutputFormat.setOutputPath(job1, new Path("/user/hadoop/pr/tmp/Output0/"));
+        FileOutputFormat.setOutputPath(job1, new Path("/user/hadoop/pr/tmp/output0/"));
         ControlledJob cjob1 = new ControlledJob(conf1);
 
         cjob1.setJob(job1);
@@ -159,26 +159,27 @@ public class PageRank {
         String threshold = args[1];
         int i = 0;
         int iteration = Integer.parseInt(itr);
-        int iterNum = 0;
-        Configuration conf2 = new Configuration();
-        conf2.set("reachCount", String.valueOf(reachCount));
-        conf2.set("threshold", threshold);
 
-        Job job2 = Job.getInstance(conf2, "PageRank");
-        job2.setJarByClass(PageRank.class);
-        job2.setMapperClass(PageRankMapper.class);
-        job2.setMapOutputKeyClass(LongWritable.class);
-        job2.setMapOutputValueClass(PRNodeWritable.class);
-//        job2.setCombinerClass(PageRankReducer.class);
-        job2.setReducerClass(PageRankReducer.class);
-        //设置reduce输出的key和value类型
-        job2.setOutputKeyClass(LongWritable.class);
-        job2.setOutputValueClass(PRNodeWritable.class);
+
 
         while(i < iteration) {
-            FileInputFormat.setInputPaths(job2, new Path("/user/hadoop/pr/tmp/Output" + i));
+            Configuration conf2 = new Configuration();
+            conf2.set("reachCount", String.valueOf(reachCount));
+            conf2.set("threshold", threshold);
+
+            Job job2 = Job.getInstance(conf2, "PageRank");
+            job2.setJarByClass(PageRank.class);
+            job2.setMapperClass(PageRankMapper.class);
+            job2.setMapOutputKeyClass(LongWritable.class);
+            job2.setMapOutputValueClass(PRNodeWritable.class);
+//        job2.setCombinerClass(PageRankReducer.class);
+            job2.setReducerClass(PageRankReducer.class);
+            //设置reduce输出的key和value类型
+            job2.setOutputKeyClass(LongWritable.class);
+            job2.setOutputValueClass(PRNodeWritable.class);
+            FileInputFormat.setInputPaths(job2, new Path("/user/hadoop/pr/tmp/output" + i));
             i++;
-            FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/pr/tmp/Output" + i));
+            FileOutputFormat.setOutputPath(job2, new Path("/user/hadoop/pr/tmp/output" + i));
 
             ControlledJob cjob2 = new ControlledJob(conf2);
 
@@ -209,7 +210,7 @@ public class PageRank {
         //设置reduce输出的key和value类型
         job3.setOutputKeyClass(LongWritable.class);
         job3.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/pr/tmp/Output" + i));
+        FileInputFormat.addInputPath(job3, new Path("/user/hadoop/pr/tmp/output" + i));
         FileOutputFormat.setOutputPath(job3, new Path(args[3]));
         System.exit(job3.waitForCompletion(true) ? 0 : 1);
     }
